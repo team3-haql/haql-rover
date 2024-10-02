@@ -50,7 +50,7 @@ public:
     } 
     RCLCPP_INFO(rclcpp::get_logger("SerialController"),
                 "Opening I2C bus %s [%x]", device.c_str(), address);
-  }
+  } 
 
   void write_vel(int id, double velocity) {
     if (ioctl(fd_, I2C_SLAVE, address_) < 0) {
