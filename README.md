@@ -37,6 +37,8 @@ Package for launching the webots simulation.
 I highly recomend using ubuntu. If you are on windows, use the wsl subsystem.
 If you are on mac, you are on your own.
 
+**Install [LTTNG](https://lttng.org/docs/v2.13/#doc-ubuntu-ppa)**
+
 This project was tested with ros2 humble, but it should work on humble or later.
 
 **Install [ros2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html)**
@@ -52,8 +54,8 @@ source /opt/ros/humble/setup.bash
 Make a ros workspace and clone this repo the `src` directory.
 
 ```bash
-mkdir -p ws_dev/src
-cd ws_dev/src
+mkdir -p ~/Desktop/ws_dev/src
+cd ~/Desktop/ws_dev/src
 git clone git@github.com:team3-haql/haql-rover.git
 ```
 
@@ -63,7 +65,7 @@ Install dependencies using `rosdep`.
 
 ```bash
 # make sure you are in the root of the workspace
-cd ws_dev
+cd ~/Desktop/ws_dev
 
 # install dependencies
 sudo apt update
@@ -75,7 +77,7 @@ Make sure you are in the root of the workspace and build all packages
 in the project.
 
 ```bash
-cd ws_dev
+cd ~/Desktop/ws_dev
 # make sure you have sourced a ros setup file before building
 colcon build --symlink-install
 ```
@@ -85,7 +87,7 @@ colcon build --symlink-install
 Source the compiled workspace.
 
 ```bash
-cd ws_dev
+cd ~/Desktop/ws_dev
 source install/setup.bash
 ```
 
