@@ -39,7 +39,7 @@ If you are on mac, you are on your own.
 
 This project was tested with ros2 humble, but it should work on humble or later.
 
-**Install [ros2](https://docs.ros.org/en/humble/Installation.html)**
+**Install [ros2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html)**
 
 Make sure to source the ros2 setup file. You can copy the command into
 your `~/.bashrc` file if you want it to be sourced automatically.
