@@ -75,7 +75,7 @@ ament_target_dependencies(
 )
 target_link_libraries(
     traverse_layer_component
-    zigmaps
+    #zigmaps
 )
 
 rclcpp_components_register_node(
