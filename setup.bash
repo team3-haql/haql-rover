@@ -1,8 +1,8 @@
 #!/bin/bash
 
-file="/home/ws_dev/src/haql-rover/setup_complete"
-
-if [ ! -e ${file} ]; then
+if cmp -s "/home/setup" "/home/ws_dev/src/haql-rover/setup.bash"; then
+    echo "Skipping setup"
+else
     cd /home/ws_dev
     source /opt/ros/humble/setup.bash
     echo 'SET UP COMPLETE'
@@ -10,6 +10,6 @@ if [ ! -e ${file} ]; then
     sudo rosdep update
     sudo rosdep install --from-paths src --ignore-src -y --rosdistro humble
     echo 'INSTALL DEPENDENCIES COMPLETE'
-fi
 
-touch setup_complete
+    sudo cat /home/ws_dev/src/haql-rover/setup.bash >> /home/setup
+fi

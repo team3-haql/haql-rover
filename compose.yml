@@ -3,18 +3,13 @@ services:
   ralphee:
     image: ubuntu:latest
     volumes:
+      - ralphee_data:/home
       - ./:/home/ws_dev/src/haql-rover
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
-    entrypoint: bash -c "
+    command: bash -c "
         . /home/ws_dev/src/haql-rover/setup.bash
       "
-  # webots:
-
-  #   ports:
-  #     - 1234:1234
-  #   environment:
-  #     - WEBOTS_SHARED_FOLDER=/Users/deweykai/repos/ws_dev/src/tmp:/home/ws/src/tmp
-  #   volumes:
-  #     - .:/home/ws/src/haql-rover
+volumes:
+  ralphee_data:
