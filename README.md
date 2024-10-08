@@ -34,72 +34,30 @@ Package for launching the webots simulation.
 
 ## Installation
 
-I highly recomend using ubuntu. If you are on windows, use the wsl subsystem.
-If you are on mac, you are on your own.
+### Things to install before proceeding:
 
-**Install [LTTNG](https://lttng.org/docs/v2.13/#doc-ubuntu-ppa)**
+**Install [docker](https://www.docker.com/products/docker-desktop/)**
 
-This project was tested with ros2 humble, but it should work on humble or later.
+**Install [git](https://git-scm.com/downloads)**
 
-**Install [ros2](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html)**
+**Setup GitHub SSH keys**
+- [Generate SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [Add SSH Key to GitHub Account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
-Make sure to source the ros2 setup file. You can copy the command into
-your `~/.bashrc` file if you want it to be sourced automatically.
+### Downloading Haql-Rover
 
-```bash
-# should run this command before any build command
-source /opt/ros/humble/setup.bash
-```
-
-Make a ros workspace and clone this repo the `src` directory.
-
-```bash
-mkdir -p ~/Desktop/ws_dev/src
-cd ~/Desktop/ws_dev/src
+Open a bash terminal and run:
+```console
 git clone git@github.com:team3-haql/haql-rover.git
 ```
-
-## Compiling
-
-Install dependencies using `rosdep`.
-
-```bash
-# make sure you are in the root of the workspace
-cd ~/Desktop/ws_dev
-
-# install dependencies
-sudo apt update
-sudo rosdep update
-sudo rosdep install --from-paths src --ignore-src -y --rosdistro humble
+Change directory to ```haql-rover``` and run:
+```console
+docker-compose up
 ```
+To install needed image and packages.
 
-Make sure you are in the root of the workspace and build all packages
-in the project.
-
-```bash
-cd ~/Desktop/ws_dev
-# make sure you have sourced a ros setup file before building
-colcon build --symlink-install
-```
-
-## Usage
-
-Source the compiled workspace.
-
-```bash
-cd ~/Desktop/ws_dev
-source install/setup.bash
-```
-
-To start the simulation, run the following command.
-
-```bash
-ros2 launch webots_dev robot_launch.py 
-```
-
-To start the localization node, run the following command.
-You can find different launch files in `src/haql-rover/boden_navigation/launch`
-
-```bash
-ros2 launch boden_navigation ekf_launch.py 
+## Compilation
+You can run docker in bash mode by typing:
+```console
+. 
 ```

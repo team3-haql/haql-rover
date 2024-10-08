@@ -37,19 +37,19 @@ RUN apt-get update; \
 
 ENV SHELL /bin/bash
 
-FROM base as webots
-# add tmp directory for webots
-WORKDIR /home/webots_ws
-COPY build-webots.bash .
-RUN /bin/bash /home/webots_ws/build-webots.bash
+# FROM base as webots
+# # add tmp directory for webots
+# WORKDIR /home/webots_ws
+# COPY build-webots.bash .
+# RUN /bin/bash /home/webots_ws/build-webots.bash
 
-# create tmp directory for webots
-WORKDIR /home/ws
-# [Optional] Set the default user. Omit if you want to keep the default as root.
+# # create tmp directory for webots
+# WORKDIR /home/ws
+# # [Optional] Set the default user. Omit if you want to keep the default as root.
 
-FROM webots as devcontainer
-USER $USERNAME
-CMD ["/bin/bash"]
+# FROM webots as devcontainer
+# USER $USERNAME
+# CMD ["/bin/bash"]
 
-FROM base as build
-WORKDIR /home/ws
+# FROM base as build
+# WORKDIR /home/ws
