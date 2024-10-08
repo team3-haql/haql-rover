@@ -32,8 +32,12 @@ RUN apt-get update; \
   ros-humble-grid-map \
   ros-humble-joint-state-broadcaster \
   ros-humble-diff-drive-controller \
-  ros-humble-nav2-bringup ; \
+  ros-humble-nav2-bringup \
+  python3-catkin-tools ; \
   rm -rf /var/lib/apt/lists/*
+
+# For catkin
+RUN sudo pip3 install -U catkin_pkg
 
 ENV SHELL /bin/bash
 
