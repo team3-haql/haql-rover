@@ -4,7 +4,6 @@ services:
     platform: linux/amd64
     volumes:
       - ./:/root/ralphee_ws
-      - ./.devcontainer/.vscode:/root/ralphee_ws
     working_dir: /root/ralphee_ws
     entrypoint: sleep infinity
 volumes:
