@@ -1,7 +1,9 @@
-FROM ros:humble as base
-ARG USERNAME=user
-ARG USER_UID=1000
+FROM ubuntu:jammy
+ARG USERNAME=team3-haql
+ARG USER_UID=1001
 ARG USER_GID=$USER_UID
+
+WORKDIR /home/ws_dev
 
 # Create the user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -11,49 +13,3 @@ RUN groupadd --gid $USER_GID $USERNAME \
   && apt-get install -y sudo \
   && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
-
-# install common packages
-RUN apt-get update; \
-  apt-get install -y -q \
-  git \
-  build-essential \
-  cmake \
-  python3 \
-  qtbase5-dev \
-  libqt5svg5-dev \
-  libzmq3-dev \
-  libdw-dev \
-  libtinfo-dev \
-  libncurses5-dev \
-  libncursesw5-dev \
-  iproute2 \
-  ros-humble-robot-localization \
-  ros-humble-foxglove-bridge \
-  ros-humble-grid-map \
-  ros-humble-joint-state-broadcaster \
-  ros-humble-diff-drive-controller \
-  ros-humble-nav2-bringup \
-  python3-catkin-tools ; \
-  rm -rf /var/lib/apt/lists/*
-
-# For catkin
-RUN sudo pip3 install -U catkin_pkg
-
-ENV SHELL /bin/bash
-
-# FROM base as webots
-# # add tmp directory for webots
-# WORKDIR /home/webots_ws
-# COPY build-webots.bash .
-# RUN /bin/bash /home/webots_ws/build-webots.bash
-
-# # create tmp directory for webots
-# WORKDIR /home/ws
-# # [Optional] Set the default user. Omit if you want to keep the default as root.
-
-# FROM webots as devcontainer
-# USER $USERNAME
-# CMD ["/bin/bash"]
-
-# FROM base as build
-# WORKDIR /home/ws

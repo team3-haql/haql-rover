@@ -1,15 +1,16 @@
 version: "3.8"
 services:
   ralphee:
-    image: ubuntu:latest
+    platform: linux/amd64
     volumes:
-      - ralphee_data:/home
+      - ralphee_data:/home/ws_dev
       - ./:/home/ws_dev/src/haql-rover
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
     command: bash -c "
-        . /home/ws_dev/src/haql-rover/setup.bash
-      "
+        . /home/ws_dev/src/haql-rover/cmds/setup.bash
+      " bash
+    working_dir: /home/ws_dev
 volumes:
   ralphee_data:

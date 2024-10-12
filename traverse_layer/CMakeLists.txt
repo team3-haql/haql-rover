@@ -1,3 +1,5 @@
+SET(ENV{PYTHONPATH} "/opt/ros/humble/lib/python3.10/site-packages/")
+
 cmake_minimum_required(VERSION 3.8)
 project(traverse_layer)
 
