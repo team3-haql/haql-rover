@@ -1,15 +1,11 @@
-version: "3.8"
 services:
   ralphee:
-    image: ubuntu:latest
+    image: osrf/ros:humble-desktop
+    platform: linux/amd64
     volumes:
-      - ralphee_data:/home
-      - ./:/home/ws_dev/src/haql-rover
-    build:
-      context: .
-      dockerfile: .devcontainer/Dockerfile
-    command: bash -c "
-        . /home/ws_dev/src/haql-rover/setup.bash
-      "
+      - ./:/root/ralphee_ws
+      - ./.devcontainer/.vscode:/root/ralphee_ws
+    working_dir: /root/ralphee_ws
+    entrypoint: sleep infinity
 volumes:
-  ralphee_data:
+  ralphee-data:

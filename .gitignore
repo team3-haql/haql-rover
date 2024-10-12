@@ -4,5 +4,6 @@
 /doc/book
 *.a
 *.o
-*.vscode
 setup_complete
+build
+install

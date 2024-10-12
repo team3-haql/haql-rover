@@ -1,31 +1,19 @@
 {
-    "name": "ROS 2 Development Container",
-    "privileged": true,
-    "remoteUser": "deweykai",
     "dockerComposeFile": ["../docker-compose.yml"],
     "service": "ralphee",
     "customizations": {
         "vscode": {
             "extensions": [
+                "ms-iot.vscode-ros",
                 "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
                 "ms-vscode.cpptools-themes",
-                "twxs.cmake",
-                "donjayamanne.python-extension-pack",
-                "eamodio.gitlens",
-                "ms-iot.vscode-ros"
+                "jeff-hykin.better-cpp-syntax",
+                "ms-python.python",
+                "ms-python.debugpy",
+                "twxs.cmake"
             ]
         }
     },
-    "workspaceFolder": "/home/ws_dev",
-    "containerEnv": {
-        "DISPLAY": "unix:0",
-        "WEBOTS_SHARED_FOLDER": "/Users/deweykai/repos/ws_dev/tmp:/home/ws/tmp"
-    },
-    "mounts": [
-        "source=${localWorkspaceFolder}/../cache/humble/build,target=/home/ws/build,type=bind",
-        "source=${localWorkspaceFolder}/../cache/humble/install,target=/home/ws/install,type=bind",
-        "source=${localWorkspaceFolder}/../cache/humble/log,target=/home/ws/log,type=bind",
-        "source=${localWorkspaceFolder}/../tmp,target=/home/ws/tmp,type=bind"
-    ],
-    "postCreateCommand": "/bin/bash /home/ws/src/haql-rover/.devcontainer/post-create.bash"
+    "workspaceFolder": "/root/ros2_ws"
 }
