@@ -60,7 +60,7 @@ Click the blue button in the bottom left corner.
 Select the "Reopen in Container" option from the dropdown at the top of the screen.
 This will automatically run docker and download the container.
 
-After the container has installed the following to download dependencies and compile the code.
+After the container has been installed run the following to download dependencies and compile the code.
 ```console
 cd /root/ralphee_ws
 . install-deps.bash
