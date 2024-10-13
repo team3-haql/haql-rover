@@ -42,7 +42,7 @@ Package for launching the webots simulation.
 
 **Install [vscode](https://code.visualstudio.com/download)**
 
-**Download the Dev Countainer Extension for VSCode**
+**Install [dev containers extension for vscode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)**
 
 **Setup GitHub SSH keys**
 - [Generate SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
