@@ -46,7 +46,7 @@ Package for launching the webots simulation.
 - [Generate SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 - [Add SSH Key to GitHub Account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
-### Downloading Haql-Rover
+### Downloading and Compilation
 
 Open a bash terminal and run:
 ```console
@@ -70,4 +70,4 @@ in the terminal to download dependencies and compile the code.
 ## Trouble Shooting:
 
 If errors are encountered while compiling delete the "build", "log", and "install" folders and try again.
-If intellisense is broken try to reopen the project.
+If intellisense is broken try to reopen the project (Traverse Layer is currently plagued with weird intellisense issues).
