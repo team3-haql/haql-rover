@@ -40,7 +40,9 @@ Package for launching the webots simulation.
 
 **Install [git](https://git-scm.com/downloads)**
 
-**Install [vscode](https://code.visualstudio.com/download) and download the Dev Countainer Extension**
+**Install [vscode](https://code.visualstudio.com/download)**
+
+**Download the Dev Countainer Extension for VSCode**
 
 **Setup GitHub SSH keys**
 - [Generate SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
@@ -48,24 +50,22 @@ Package for launching the webots simulation.
 
 ### Downloading and Compilation
 
-Open a bash terminal and run:
+Run this to download the repository:
 ```console
 git clone git@github.com:team3-haql/haql-rover.git
 ```
-to download the repository.
 
-After downloading the repo open it in VSCode.
-Click the blue button in the bottom left hand corner.
+After downloading the repository open it in VSCode.
+Click the blue button in the bottom left corner.
 Select the "Reopen in Container" option from the dropdown at the top of the screen.
 This will automatically run docker and download the container.
 
-After the container has installed run:
+After the container has installed the following to download dependencies and compile the code.
 ```console
 cd /root/ralphee_ws
 . install-deps.bash
 . compile.bash
 ```
-in the terminal to download dependencies and compile the code.
 
 ## Trouble Shooting:
 
