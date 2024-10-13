@@ -5,7 +5,7 @@
 #include <filters/filter_chain.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <string>
-#include <nav2_msgs/msg/costmap.hpp>
+#include <nav2_msgs/nav2_msgs/msg/costmap.hpp>
 #include <std_msgs/msg/float64.hpp>
 #include <mutex>
 

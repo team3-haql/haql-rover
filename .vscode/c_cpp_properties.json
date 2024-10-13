@@ -11,14 +11,14 @@
                 "/usr/include/**",
                 "/root/ralphee_ws/install/boden_interfaces/include/**",
                 "/root/ralphee_ws/install/bodenbot/share/**",
-                "/root/ralphee_ws/install/traverse_layer/share/**"
+                "/root/ralphee_ws/install/traverse_layer/share/**",
+                "/root/ralphee_ws/src/traverse_layer/include"
             ],
             "name": "ROS",
             "intelliSenseMode": "gcc-x64",
             "compilerPath": "/usr/bin/g++",
             "cStandard": "c99",
-            "cppStandard": "c++20",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "cppStandard": "c++20"
         }
     ],
     "version": 4

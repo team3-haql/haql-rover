@@ -14,6 +14,9 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 #include <chrono>
+
+// TODO: FIX MYSTERIOUS "STRLEN" intellisense error
+
 namespace traverse_layer
 {
 
