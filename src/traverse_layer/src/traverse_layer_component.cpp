@@ -6,7 +6,9 @@
 #include <traverse_layer/traverse_layer_component.hpp>
 #include <grid_map_cv/grid_map_cv.hpp>
 
-//#include <zigmaps.h>
+#include <zigmaps.h>
+#include <rclcpp/logger.hpp>
+#include <cstddef>
 
 namespace traverse_layer
 {
@@ -199,66 +201,66 @@ namespace traverse_layer
 
         auto start = std::chrono::high_resolution_clock::now();
 
-    //     MapLayer* map = zigmaps_create(
-    //         inputMap.getLength().x(), inputMap.getLength().y(),
-    //         inputMap.getPosition().x(), inputMap.getPosition().y(),
-    //         inputMap.getResolution()
-    //     );
+        MapLayer* map = zigmaps_create(
+            inputMap.getLength().x(), inputMap.getLength().y(),
+            inputMap.getPosition().x(), inputMap.getPosition().y(),
+            inputMap.getResolution()
+        );
 
-    //     for (grid_map::GridMapIterator iterator(inputMap); !iterator.isPastEnd(); ++iterator) {
-    //         grid_map::Position position;
-    //         inputMap.getPosition(*iterator, position);
-    //         float* value = zigmaps_at(map, position.x(), position.y());
-    //         if (value != NULL) {
-    //             *value = inputMap.at("elevation", *iterator);
-    //         }
-    //     }
+        for (grid_map::GridMapIterator iterator(inputMap); !iterator.isPastEnd(); ++iterator) {
+            grid_map::Position position;
+            inputMap.getPosition(*iterator, position);
+            float* value = zigmaps_at(map, position.x(), position.y());
+            if (value != NULL) {
+                *value = inputMap.at("elevation", *iterator);
+            }
+        }
 
-    //     MapLayer* traverse = zigmaps_make_traverse(map);
+        MapLayer* traverse = zigmaps_make_traverse(map);
 
-    //     inputMap.add("traversability");
-    //     for (grid_map::GridMapIterator iterator(inputMap); !iterator.isPastEnd(); ++iterator) {
-    //         grid_map::Position position;
-    //         inputMap.getPosition(*iterator, position);
-    //         float* value = zigmaps_at(traverse, position.x(), position.y());
-    //         if (value != NULL) {
-    //             inputMap.at("traversability", *iterator) = *value;
-    //         }
-    //     }
+        inputMap.add("traversability");
+        for (grid_map::GridMapIterator iterator(inputMap); !iterator.isPastEnd(); ++iterator) {
+            grid_map::Position position;
+            inputMap.getPosition(*iterator, position);
+            float* value = zigmaps_at(traverse, position.x(), position.y());
+            if (value != NULL) {
+                inputMap.at("traversability", *iterator) = *value;
+            }
+        }
 
-    //     zigmaps_free(traverse);
-    //     zigmaps_free(map);
+        zigmaps_free(traverse);
+        zigmaps_free(map);
 
-    //     clear_footprint(inputMap, 0.5);
-    //     update_map(inputMap);
+        clear_footprint(inputMap, 0.5);
+        update_map(inputMap);
 
-    //     // // Apply chain filter
-    //     // grid_map::GridMap outputMap;
-    //     // if (!filter_chain_.update(inputMap, outputMap)) {
-    //     //     RCLCPP_ERROR(this->get_logger(), "Failed to update filter chain.");
-    //     //     return;
-    //     // }
+        // // Apply chain filter
+        // grid_map::GridMap outputMap;
+        // if (!filter_chain_.update(inputMap, outputMap)) {
+        //     RCLCPP_ERROR(this->get_logger(), "Failed to update filter chain.");
+        //     return;
+        // }
 
-    //     // clear_footprint(outputMap, 0.5);
-    //     // // RCLCPP_INFO(this->get_logger(), "Filter chain has been updated.");
+        // clear_footprint(outputMap, 0.5);
+        // // RCLCPP_INFO(this->get_logger(), "Filter chain has been updated.");
 
-    //     // update_map(outputMap);
+        // update_map(outputMap);
 
-    //     auto end = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
 
-    //     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    //     double latency = duration.count() / 1000.0;
-    //     if (publish_latency_) {
-    //         std_msgs::msg::Float64 latencyMessage;
-    //         latencyMessage.data = latency;
-    //         latency_publisher_->publish(latencyMessage);
-    //     }
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        double latency = duration.count() / 1000.0;
+        if (publish_latency_) {
+            std_msgs::msg::Float64 latencyMessage;
+            latencyMessage.data = latency;
+            latency_publisher_->publish(latencyMessage);
+        }
 
-    //     // Publish costmap
-    //     // nav2_msgs::msg::Costmap costmapMessage;
-    //     // grid_map::GridMapRosConverter::toCostmap(
-    //     //     outputMap, costmap_layer_, costmap_min_, costmap_max_, costmapMessage);
-    //     // costmap_publisher_->publish(costmapMessage);
+        // Publish costmap
+        // nav2_msgs::msg::Costmap costmapMessage;
+        // grid_map::GridMapRosConverter::toCostmap(
+        //     outputMap, costmap_layer_, costmap_min_, costmap_max_, costmapMessage);
+        // costmap_publisher_->publish(costmapMessage);
     }
 
 

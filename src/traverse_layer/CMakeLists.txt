@@ -77,7 +77,7 @@ ament_target_dependencies(
 )
 target_link_libraries(
     traverse_layer_component
-    #zigmaps
+    zigmaps
 )
 
 rclcpp_components_register_node(
@@ -85,6 +85,9 @@ rclcpp_components_register_node(
     PLUGIN "traverse_layer::TraverseLayer"
     EXECUTABLE traverse_layer
 )
+
+# ZigMaps
+include_directories(zigmaps)
 
 # PointcloudToGridmap
 add_library(

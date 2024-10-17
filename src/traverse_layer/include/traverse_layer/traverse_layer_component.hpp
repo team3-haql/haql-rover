@@ -1,6 +1,8 @@
 #ifndef TRAVERSE_LAYER_HPP_
 #define TRAVERSE_LAYER_HPP_
 
+#include <cstddef>
+#include <cstring>
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <filters/filter_chain.hpp>
 #include <rclcpp/rclcpp.hpp>

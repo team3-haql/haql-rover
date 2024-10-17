@@ -4,10 +4,8 @@ services:
     platform: linux/amd64
     volumes:
       - ./:/root/ralphee_ws
-      - ralphee-data:/root
       - ros:/opt/ros
     working_dir: /root/ralphee_ws
     entrypoint: sleep infinity
 volumes:
-  ralphee-data:
   ros:

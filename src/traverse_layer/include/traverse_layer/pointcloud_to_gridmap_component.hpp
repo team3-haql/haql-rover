@@ -1,6 +1,7 @@
 #ifndef POINTCLOUD_TO_GRIDMAP_HPP_
 #define POINTCLOUD_TO_GRIDMAP_HPP_
 
+// Grid Map Ros cause of errors I think
 #include <grid_map_ros/grid_map_ros.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <rclcpp/rclcpp.hpp>

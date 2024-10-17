@@ -12,13 +12,14 @@
                 "/root/ralphee_ws/install/boden_interfaces/include/**",
                 "/root/ralphee_ws/install/bodenbot/share/**",
                 "/root/ralphee_ws/install/traverse_layer/share/**",
-                "/root/ralphee_ws/src/traverse_layer/include"
+                "/root/ralphee_ws/src/traverse_layer/include/**",
+                "/usr/include/linux/**"
             ],
             "name": "ROS",
-            "intelliSenseMode": "gcc-x64",
+            "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/g++",
-            "cStandard": "c99",
-            "cppStandard": "c++20"
+            "cStandard": "gnu99",
+            "cppStandard": "gnu++20"
         }
     ],
     "version": 4

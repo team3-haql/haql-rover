@@ -42,14 +42,14 @@ extern "C" {
 namespace bodenbot {
 class SerialInterface {
 public:
-  SerialInterface(std::string device, int address) {
-    address_ = address;
+	SerialInterface(std::string device, int address) {
+		address_ = address;
 
-    if ((fd_ = open(device.c_str(), O_RDWR)) < 0) {
-      throw std::runtime_error("Failed to open the i2c bus");
-    } 
-    RCLCPP_INFO(rclcpp::get_logger("SerialController"),
-                "Opening I2C bus %s [%x]", device.c_str(), address);
+		if ((fd_ = open(device.c_str(), O_RDWR)) < 0) {
+		throw std::runtime_error("Failed to open the i2c bus");
+		} 
+		RCLCPP_INFO(rclcpp::get_logger("SerialController"),
+					"Opening I2C bus %s [%x]", device.c_str(), address);
   } 
 
   void write_vel(int id, double velocity) {
