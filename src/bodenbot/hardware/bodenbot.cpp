@@ -424,7 +424,6 @@ hardware_interface::return_type SerialController::read(const rclcpp::Time & /*ti
   	return hardware_interface::return_type::OK;
 }
 
-// 
 hardware_interface::return_type bodenbot::SerialController::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
 	// Foreach joint
 	for (auto i = 0u; i < info_.joints.size(); i++) {
