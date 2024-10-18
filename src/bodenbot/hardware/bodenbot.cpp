@@ -42,7 +42,12 @@ extern "C" {
 namespace bodenbot {
 class SerialInterface {
 public:
-	// Opens the specified device driver for input output, sets address, initializes logger.
+	/**
+	 * Creates serial interface, immediately connects to device.
+	 * 
+	 * \param[in] device Path to driver
+	 * \param[in] address Where to write/read data in driver
+	 */
 	SerialInterface(std::string device, int address) {
 		address_ = address;
 
@@ -53,7 +58,12 @@ public:
                 	"Opening I2C bus %s [%x]", device.c_str(), address);
   	} 
 
-	// Writes velocity to device
+	/**
+	 * Writes velocity to driver.
+	 * 
+	 * \param[in] id Represents the motor id (Most likely used by arduino to manipute motors)
+	 * \param[in] velocity velocity to write in driver
+	 */
   	void write_vel(int id, double velocity) {
 		// https://man7.org/linux/man-pages/man2/ioctl.2.html
 		// https://en.wikipedia.org/wiki/Ioctl
@@ -103,7 +113,11 @@ public:
     	}
   	}
 
-	// Reads velocity from devices
+	/**
+	 * Used to get velocity that is currently in driver
+	 * \param[in] id Represents the motor id (Most likely used by arduino to manipute motors)
+	 * \return Velocity found in driver
+	 */
   	double read_vel(int id) {
 		// Select address to write to
     	if (ioctl(fd_, I2C_SLAVE, address_) < 0) {
@@ -145,8 +159,10 @@ public:
     	return vel;
   	}
 
-	// Closes the connection
-	// Why is this not a deconstructor?
+	/**
+	 * Severes connection to driver, prevents weird bugs
+	 * Will most likely change to deconstructor as it makes more sense given the context of class.
+	 */
   	void close_connection() {
 		// Close file
     	close(fd_);
