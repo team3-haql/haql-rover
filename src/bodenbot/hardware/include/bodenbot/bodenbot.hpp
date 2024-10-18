@@ -31,55 +31,96 @@
 #include "rclcpp_lifecycle/state.hpp"
 #include "bodenbot/visibility_control.h"
 
-namespace bodenbot
-{
-    class SerialInterface;
+namespace bodenbot {
 
-    class SerialController : public hardware_interface::SystemInterface
-    {
-    public:
-        RCLCPP_SHARED_PTR_DEFINITIONS(SerialController)
+/**
+ * Class implemented in bodenbot.cpp that will handle interaction with hardware.
+ */
+class SerialInterface;
 
-            BODENBOT_PUBLIC
-            hardware_interface::CallbackReturn on_init(
-                const hardware_interface::HardwareInfo& info) override;
+/**
+ * Loads data from file to generate rover. Can then control and read speed of wheels.
+ * IS the rover (sorta).
+ */
+class SerialController : public hardware_interface::SystemInterface {
+public:
+    RCLCPP_SHARED_PTR_DEFINITIONS(SerialController)
 
-        BODENBOT_PUBLIC
-            std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+    /**
+     * Loads hardware config from bodenbot.ros2_control.xacro
+     * Initializes logging system
+     * 
+     * \param[in] info Data used to initialize SystemInterface with (The parent class)
+     * 
+     * \return Whether or not initialization was successful
+     */
+    BODENBOT_PUBLIC hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareInfo& info) override;
 
-        BODENBOT_PUBLIC
-            std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+    /**
+     * \return List of state interfaces
+     */
+    BODENBOT_PUBLIC std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-        BODENBOT_PUBLIC
-            hardware_interface::CallbackReturn on_activate(
-                const rclcpp_lifecycle::State& previous_state) override;
+    /**
+     * \return List of command interfaces
+     */
+    BODENBOT_PUBLIC std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-        BODENBOT_PUBLIC
-            hardware_interface::CallbackReturn on_deactivate(
-                const rclcpp_lifecycle::State& previous_state) override;
+    /**
+     * Activates Rover, initializes data
+     * Sets up SerialInterface to interact with hardware if built for the purpose.
+     * 
+     * \param[in] previous_state Unused parameter
+     * 
+     * \return Whether or not activation was successful
+     */
+    BODENBOT_PUBLIC hardware_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State& previous_state) override;
 
-        BODENBOT_PUBLIC
-            hardware_interface::return_type read(
-                const rclcpp::Time& time, const rclcpp::Duration& period) override;
+    /**
+     * Deactivates rover, removes SerialInterface if initialized
+     * 
+     * \param[in] previous_state Unused parameter
+     * 
+     * \return Whether or not deactivation was successful
+     */
+    BODENBOT_PUBLIC hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State& previous_state) override;
 
-        BODENBOT_PUBLIC
-            hardware_interface::return_type write(
-                const rclcpp::Time& time, const rclcpp::Duration& period) override;
+    /**
+     * Reads the positions of the motors and stores them in hw_positions_
+     * 
+     * \param[in] time Unused parameter
+     * \param[in] period The measured time taken by the last control loop iteration
+     */
+    BODENBOT_PUBLIC hardware_interface::return_type read(const rclcpp::Time& time, const rclcpp::Duration& period) override;
 
-    private:
-        bool debug_;
-        bool mock_hardware_;
-        std::string i2c_file_;
-        int i2c_address_;
+    /**
+     * Sets motor speed
+     * 
+     * \param[in] time Unused param
+     * \param[in] period Unused param
+     */
+    BODENBOT_PUBLIC hardware_interface::return_type write(const rclcpp::Time& time, const rclcpp::Duration& period) override;
 
-        SerialInterface* serial_interface_;
+private:
+    // Whether or not to perform special debug logging
+    bool debug_;
+    // Whether or not this is running on real hardware
+    bool mock_hardware_;
+    // Device driver
+    std::string i2c_file_;
+    // Address to write/read to device at
+    int i2c_address_;
 
-        std::vector<double> hw_commands_;
-        std::vector<double> hw_velocities_;
-        std::vector<double> hw_positions_;
-        std::vector<size_t> motor_id_;
-        std::vector<bool> reversed_;
-    };
+    // Where hardware interactions takeplace
+    SerialInterface* serial_interface_;
+
+    // Hardware/Motor info
+    std::vector<double> hw_commands_;
+    std::vector<double> hw_velocities_;
+    std::vector<double> hw_positions_;
+    std::vector<size_t> motor_id_;
+    std::vector<bool> reversed_;
+};
 
 }  // namespace smokey
 

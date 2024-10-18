@@ -40,7 +40,6 @@ extern "C" {
 ////////////////////////////////////////////////
 
 namespace bodenbot {
-// Class used to read and write velocty to specified device at a specified address.
 class SerialInterface {
 public:
 	// Opens the specified device driver for input output, sets address, initializes logger.
@@ -162,7 +161,6 @@ private:
   	int fd_;
 };
 
-// Initializes hardware from bodenbot.ros2_control.xacro
 hardware_interface::CallbackReturn SerialController::on_init(const hardware_interface::HardwareInfo &info) {
 	// If system interface setup does not work return error
 	if (hardware_interface::SystemInterface::on_init(info) != 
@@ -271,7 +269,6 @@ hardware_interface::CallbackReturn SerialController::on_init(const hardware_inte
   	return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-// Sends out all state_interfaces to the party that requested
 std::vector<hardware_interface::StateInterface> SerialController::export_state_interfaces() {
 	std::vector<hardware_interface::StateInterface> state_interfaces;
 
@@ -303,7 +300,6 @@ std::vector<hardware_interface::StateInterface> SerialController::export_state_i
 	return state_interfaces;
 }
 
-// Sends out all hardware_interfaces to the party that requested
 std::vector<hardware_interface::CommandInterface> SerialController::export_command_interfaces() {
 	std::vector<hardware_interface::CommandInterface> command_interfaces;
 
@@ -327,7 +323,6 @@ std::vector<hardware_interface::CommandInterface> SerialController::export_comma
   	return command_interfaces;
 }
 
-// Prepares robot to start
 hardware_interface::CallbackReturn SerialController::on_activate(const rclcpp_lifecycle::State & /*previous_state*/) {
 	// Log that its activating
 	RCLCPP_INFO(
@@ -369,7 +364,6 @@ hardware_interface::CallbackReturn SerialController::on_activate(const rclcpp_li
 	return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-// Stops robot
 hardware_interface::CallbackReturn SerialController::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/) {
   	// BEGIN: This part here is for exemplary purposes - Please do not copy to
   	// your production code
@@ -395,7 +389,6 @@ hardware_interface::CallbackReturn SerialController::on_deactivate(const rclcpp_
   	return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-// Updates wheel positions
 hardware_interface::return_type SerialController::read(const rclcpp::Time & /*time*/, const rclcpp::Duration &period) {
 	// update state interface for steer joint
   	for (auto i = 0u; i < info_.joints.size(); i++) {
