@@ -18,6 +18,13 @@
         "/root/ralphee_ws/build/traverse_layer",
         "/root/ralphee_ws/build/webots_dev"
     ],
+    "C_Cpp.codeAnalysis.exclude": {
+        "/opt/ros/humble/include/**": true,
+        "/usr/include/**": true,
+        "/root/ralphee_ws/install/boden_interfaces/include/**": true,
+        "/root/ralphee_ws/install/bodenbot/share/**": true,
+        "/root/ralphee_ws/install/traverse_layer/share/**": true,
+    },
     "files.associations": {
         "*.h": "c",
         "string": "cpp",
