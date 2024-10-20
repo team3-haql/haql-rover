@@ -15,9 +15,6 @@
 #include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 #include <chrono>
 
-// TODO: FIX MYSTERIOUS "STRLEN" intellisense error
-// Its an issue with gridmap class, still dont know how to fix it.
-
 namespace traverse_layer
 {
 
