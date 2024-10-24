@@ -18,8 +18,8 @@
             "name": "ROS",
             "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/g++",
-            "cStandard": "c99",
-            "cppStandard": "c++20",
+            "cStandard": "gnu99",
+            "cppStandard": "gnu++20",
             "compileCommands": "/root/ralphee_ws/build/compile_commands.json"
         }
     ],
