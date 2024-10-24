@@ -18,16 +18,48 @@ namespace traverse_layer
 class PointcloudToGridmap : public rclcpp::Node
 {
 public:
+    /**
+     * Initializes pointcloud map
+     * 
+     * \param[in] options used to build the inhertience class
+     */
     PointcloudToGridmap(const rclcpp::NodeOptions & options);
+    /**
+     * Logs that Pointcloud Gridmap is inactive
+     */
     virtual ~PointcloudToGridmap();
 
+    /**
+     * Sets and reads parameters used by node parent class
+     * 
+     * \return whether or not this action was succesful
+     */
     bool read_parameters();
 
+    /**
+     * Reads data from sensor and puts it in raw map
+     * 
+     * \param[in] msg Point cloud from sensor
+     */
     void add_sensor_data(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+
+    /**
+     * Removes all points that have a max height lower than 3 standard deviations from the elevation
+     */
     void visibility_cleanup();
+
+    /**
+     * Reads elevation and variance from raw map and puts it in map.
+     */
     void update_map_from_raw();
+    /**
+     * Moves both map and raw maps center elimating all data that are no longer in range. 
+     */
     void update_map_center();
 
+    /**
+     * Sends map to subscribers
+     */
     void publish_pointcloud();
 
 private:

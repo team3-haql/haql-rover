@@ -7,7 +7,7 @@
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 #include <message_filters/subscriber.h>
 #include <tf2_ros/buffer.h>
-#include <tf2_ros/create_timer_ros.h>
+#include <tf2_ros/create_timer_ros.h>  
 #include <tf2_ros/message_filter.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/msg/point_stamped.h>
@@ -15,12 +15,19 @@
 #include <tf2_sensor_msgs/tf2_sensor_msgs.hpp>
 #include <chrono>
 
+// This script heavily uses the GridMaps class.
+// Documentation can be found here: https://github.com/ANYbotics/grid_map/tree/humble
+
 namespace traverse_layer
 {
 
-PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : Node("pointcloud_to_gridmap", options),
-    raw_map_({"elevation", "variance","time",
-              "lowest_scan_point", "sensor_x_at_lowest_scan", "sensor_y_at_lowest_scan", "sensor_z_at_lowest_scan"}),
+PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : 
+    Node("pointcloud_to_gridmap", options),
+    raw_map_({
+        "elevation", "variance", "time", "lowest_scan_point", 
+        "sensor_x_at_lowest_scan", "sensor_y_at_lowest_scan", 
+        "sensor_z_at_lowest_scan"
+    }),
     map_({"elevation", "lower_bound", "upper_bound"}),
     min_variance_(0.003 * 0.003),
     // max_variance_(0.03 * 0.03),
@@ -31,6 +38,7 @@ PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : 
     enable_visibility_cleanup_(true),
     visibility_cleanup_rate_(1.0)
 {
+    // Initialize node variables as well as class variables
     if (!read_parameters()) {
         RCLCPP_ERROR(this->get_logger(), "Failed to read parameters.");
         rclcpp::shutdown();
@@ -39,6 +47,7 @@ PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : 
 
     initial_time_ = this->get_clock()->now();
 
+    // Set grid map parameters
     grid_map::Length mapLength(world_length_, world_width_);
     grid_map::Position mapPosition(0.0, 0.0);
 
@@ -53,26 +62,33 @@ PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : 
         this->get_logger(),
         "Created map with size %f x %f m (%i x %i cells).",
         map_.getLength().x(), map_.getLength().y(),
-        map_.getSize()(0), map_.getSize()(1));
-
+        map_.getSize()(0), map_.getSize()(1)
+    );
 
     std::chrono::duration<int> buffer_timeout(1);
     // TF Buffer and listener
+    // Buffer stores cache and deletes it over time.
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
 
     // Create time interface before call to wait for transform
     auto timer_interface = std::make_shared<tf2_ros::CreateTimerROS>(
         this->get_node_base_interface(),
-        this->get_node_timers_interface());
+        this->get_node_timers_interface()
+    );
     tf_buffer_->setCreateTimerInterface(timer_interface);
 
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
     subscriber_.subscribe(this, input_topic_);
     tf_filter_ = std::make_shared<tf2_ros::MessageFilter<sensor_msgs::msg::PointCloud2>>(
-        subscriber_, *tf_buffer_, map_frame_id_, 100,
+        subscriber_, 
+        *tf_buffer_, 
+        map_frame_id_, 
+        100,
         this->get_node_logging_interface(),
-        this->get_node_clock_interface(), buffer_timeout);
+        this->get_node_clock_interface(), 
+        buffer_timeout
+    );
 
     tf_filter_->registerCallback(&PointcloudToGridmap::add_sensor_data, this);
 
@@ -81,30 +97,42 @@ PointcloudToGridmap::PointcloudToGridmap(const rclcpp::NodeOptions & options) : 
     //     std::bind(&PointcloudToGridmap::callback, this, std::placeholders::_1));
 
     publisher_ = this->create_publisher<grid_map_msgs::msg::GridMap>(
-        output_topic_, 5);
+        output_topic_, // Topic defined elsewhere
+        static_cast<rclcpp::QoS>(5)
+    );
 
+    // Calls publish pointcloud every x milliseconds.
     publish_timer_ = this->create_wall_timer(
-        std::chrono::milliseconds(static_cast<int>(1000.0 / publish_rate_)),
-        std::bind(&PointcloudToGridmap::publish_pointcloud, this));
+        std::chrono::milliseconds(static_cast<int>(1000.0 / publish_rate_)), // Period
+        std::bind(&PointcloudToGridmap::publish_pointcloud, this) // Calls publish pointcloud on this object.
+    );
 
     if (enable_visibility_cleanup_) {
-        RCLCPP_INFO(this->get_logger(), "Starting visibility cleanup timer");
+        RCLCPP_INFO(
+            this->get_logger(), 
+            "Starting visibility cleanup timer"
+        );
+
+        // Call visibility clean up every x seconds.
         visibility_cleanup_timer_ = this->create_wall_timer(
             std::chrono::milliseconds(static_cast<int>(1000.0 / visibility_cleanup_rate_)),
-            std::bind(&PointcloudToGridmap::visibility_cleanup, this));
+            std::bind(&PointcloudToGridmap::visibility_cleanup, this)
+        );
     }
 
     latency_publisher_ = this->create_publisher<std_msgs::msg::Float64>(
-        "point_to_grid/latency", rclcpp::QoS(1).durability_volatile());
+        "point_to_grid/latency", // Topic
+        rclcpp::QoS(1).durability_volatile() // Can only hold one message in queue while publishing, volatile
+    );
 }
 
-PointcloudToGridmap::~PointcloudToGridmap()
-{
+PointcloudToGridmap::~PointcloudToGridmap() {
     RCLCPP_INFO(this->get_logger(), "PointcloudToGridmap node has been stopped.");
 }
 
 
 bool PointcloudToGridmap::read_parameters() {
+    // Sets parameters as well as default values for node object
     this->declare_parameter<std::string>("input_topic", "input_topic");
     this->declare_parameter<std::string>("output_topic", "output_topic");
     this->declare_parameter<std::string>("map_frame_id", "map");
@@ -117,15 +145,18 @@ bool PointcloudToGridmap::read_parameters() {
     this->declare_parameter<bool>("visibility_cleanup.enabled", false);
     this->declare_parameter<double>("visibility_cleanup.rate", 1.0);
 
+    // Store input topic in input_topic_, if not there log error
     if (!this->get_parameter("input_topic", input_topic_)) {
         RCLCPP_ERROR(this->get_logger(), "Failed to get input_topic.");
         return false;
     }
     this->get_parameter("output_topic", output_topic_);
 
+    // Log input and output topics
     RCLCPP_INFO(this->get_logger(), "input_topic: %s", input_topic_.c_str());
     RCLCPP_INFO(this->get_logger(), "output_topic: %s", output_topic_.c_str());
 
+    // Move values defined above into designated variable
     if (!this->get_parameter("map_frame_id", map_frame_id_)) {
         RCLCPP_ERROR(this->get_logger(), "Failed to get map_frame_id.");
         return false;
@@ -171,52 +202,70 @@ void PointcloudToGridmap::update_map_from_raw() {
     auto method_start = std::chrono::high_resolution_clock::now();
 
     for (grid_map::GridMapIterator iterator(raw_map_); !iterator.isPastEnd(); ++iterator) {
-        grid_map::Index index;
-        grid_map::Position position;
+        grid_map::Index index = {0, 0};
+        grid_map::Position position = {0.0f, 0.0f};
 
+        // Position is an out
         if (!raw_map_.getPosition(*iterator, position)) {
             continue; // skip this point outside of map
         }
 
+        // Index is an out
         if (!map_.getIndex(position, index)) {
-            continue;
+            continue; // skip if outside of map
         }
 
+        // Get elevation and variance of point
         double elevation = raw_map_.at("elevation", *iterator);
         double variance = raw_map_.at("variance", *iterator);
         double sigma = sqrt(variance);
         map_.at("elevation", index) = elevation;
+        // Set range of what the elevation is
         map_.at("upper_bound", index) = elevation + 2 * sigma;
         map_.at("lower_bound", index) = elevation - 2 * sigma;
     }
 
+    // Log time taken to compute
     std::chrono::duration<double> method_duration = std::chrono::high_resolution_clock::now() - method_start;
-    RCLCPP_DEBUG(this->get_logger(), "update_map_from_raw took %f ms", method_duration.count() * 1000.0);
+    RCLCPP_DEBUG(
+        this->get_logger(), 
+        "update_map_from_raw took %f ms", 
+        method_duration.count() * 1000.0
+    );
 }
 
 void PointcloudToGridmap::update_map_center() {
     try {
         geometry_msgs::msg::TransformStamped transform;
+        // If this fails send warning
         transform = tf_buffer_->lookupTransform(
-            map_.getFrameId(), center_frame_id_,
+            map_.getFrameId(), 
+            center_frame_id_,
             tf2::TimePointZero
         );
         grid_map::Position newCenter(
             transform.transform.translation.x,
             transform.transform.translation.y
         );
+        // Move changes the position of the map frame as 
+        // well as wipes out data that is out of bounds.
         map_.move(newCenter);
         raw_map_.move(newCenter);
-    } catch (tf2::TransformException &ex) {
+    } 
+    catch (tf2::TransformException &ex) {
         RCLCPP_WARN(
             this->get_logger(),
             "Failed to center map. Could not find transform from %s to %s: %s",
-            map_.getFrameId().c_str(), center_frame_id_.c_str(), ex.what());
+            map_.getFrameId().c_str(), 
+            center_frame_id_.c_str(), 
+            ex.what()
+        );
         return;
     }
 }
 
 void PointcloudToGridmap::publish_pointcloud() {
+    // Prevents other threads from accessing the raw map and the map
     std::lock_guard<std::mutex> raw_lock(raw_map_mutex_);
     std::lock_guard<std::mutex> map_lock(map_mutex_);
     // RCLCPP_INFO(this->get_logger(), "Publishing grid map.");
@@ -224,6 +273,7 @@ void PointcloudToGridmap::publish_pointcloud() {
 
     std::unique_ptr<grid_map_msgs::msg::GridMap> message;
     message = grid_map::GridMapRosConverter::toMessage(map_);
+    // Sends to subscribers
     publisher_->publish(std::move(message));
 
     update_map_center();
@@ -234,6 +284,7 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
     sensor_msgs::msg::PointCloud2 cloud;
     geometry_msgs::msg::TransformStamped transform;
 
+    // Prevent other threads from accessing raw map
     std::lock_guard<std::mutex> lock(raw_map_mutex_);
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -242,14 +293,19 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
     try {
         tf_buffer_->transform(*msg, cloud, map_.getFrameId());
         transform = tf_buffer_->lookupTransform(
-            map_.getFrameId(), msg->header.frame_id,
-            tf2::TimePointZero);
-
-    } catch (tf2::TransformException &ex) {
+            map_.getFrameId(), 
+            msg->header.frame_id,
+            tf2::TimePointZero
+        );
+    } 
+    catch (tf2::TransformException &ex) {
         RCLCPP_WARN(
             this->get_logger(),
             "Could not transform point cloud from frame %s to %s: %s",
-            msg->header.frame_id.c_str(), map_.getFrameId().c_str(), ex.what());
+            msg->header.frame_id.c_str(), 
+            map_.getFrameId().c_str(), 
+            ex.what()
+        );
         return;
     }
 
@@ -317,7 +373,8 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
                     elevation = pz;
                     variance = R;
                 }
-            } else {
+            } 
+            else {
                 variance += multi_height_noise_;
             }
             continue;
@@ -383,12 +440,13 @@ void PointcloudToGridmap::visibility_cleanup() {
         }
 
         grid_map::Index index_at_sensor;
-        if (!raw_map_.getIndex(grid_map::Position(sensor_x, sensor_y), index_at_sensor)) {
+        if (!raw_map_.getIndex(grid_map::Position(sensor_x, sensor_y), /* out */ index_at_sensor)) {
             continue;
         }
 
         grid_map::Position point;
-        raw_map_.getPosition(*iterator, point);
+        raw_map_.getPosition(*iterator, /* out */ point);
+        // Difference between the camera and the point scanned.
         double point_dx = point.x() - sensor_x;
         double point_dy = point.y() - sensor_y;
         double point_distance = sqrt(point_dx * point_dx + point_dy * point_dy);
@@ -398,9 +456,13 @@ void PointcloudToGridmap::visibility_cleanup() {
             for (grid_map::LineIterator iterator(raw_map_, index_at_sensor, *iterator); !iterator.isPastEnd(); ++iterator) {
                 grid_map::Position cell_position;
                 raw_map_.getPosition(*iterator, cell_position);
+
+                // Difference between camera position and the cell position
                 double cell_dx = cell_position.x() - sensor_x;
                 double cell_dy = cell_position.y() - sensor_y;
                 double cell_distance = point_distance - sqrt(cell_dx * cell_dx + cell_dy * cell_dy);
+
+                // TODO: What does this equation do?
                 double max_height = lowest_scan_point + (sensor_z - lowest_scan_point) / point_distance * cell_distance;
                 auto& cell_max_height = raw_map_.at("max_height", *iterator);
                 if (std::isnan(cell_max_height) || cell_max_height > max_height) {
@@ -411,6 +473,7 @@ void PointcloudToGridmap::visibility_cleanup() {
     }
 
     // clean map
+    // Removes all variables that have a lower max height than the elevation minus 3 standard deviations
     std::vector<grid_map::Position> cells_to_remove;
     for (grid_map::GridMapIterator iterator(raw_map_); !iterator.isPastEnd(); ++iterator) {
         if (!raw_map_.isValid(*iterator)) {
@@ -423,7 +486,9 @@ void PointcloudToGridmap::visibility_cleanup() {
             const auto& elevation = raw_map_.at("elevation", *iterator);
             const auto& variance = raw_map_.at("variance", *iterator);
             const auto& max_height = raw_map_.at("max_height", *iterator);
-            if (!std::isnan(max_height) && elevation - 3.0 * sqrt(variance) > max_height) {
+
+            double standard_deviation = sqrt(variance);
+            if (!std::isnan(max_height) && elevation - 3.0 * standard_deviation > max_height) {
                 grid_map::Position position;
                 raw_map_.getPosition(*iterator, position);
                 cells_to_remove.push_back(position);
@@ -431,10 +496,11 @@ void PointcloudToGridmap::visibility_cleanup() {
         }
     }
 
+    // Sets all valid cells in cells_to_remove to NAN
     for (auto& cell : cells_to_remove) {
         grid_map::Index index;
         if (!raw_map_.getIndex(cell, index)) {
-            continue;
+            continue; // If not in map skip
         }
         if (raw_map_.isValid(index)) {
             raw_map_.at("elevation", index) = NAN;
