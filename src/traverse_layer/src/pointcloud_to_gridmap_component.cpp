@@ -310,6 +310,7 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
     }
 
     const rclcpp::Time current_time = this->get_clock()->now();
+    // Time since class was created
     const double time_since_start = (current_time - initial_time_).seconds();
 
     auto& elevation_layer = raw_map_["elevation"];
@@ -329,14 +330,15 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
     for (; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z) {
         double px = *iter_x, py = *iter_y, pz = *iter_z;
 
+        // Get in relation to curr position
         double dx = px - transform.transform.translation.x;
         double dy = py - transform.transform.translation.y;
         double dz = pz - transform.transform.translation.z;
 
         grid_map::Index index;
-        grid_map::Position position(px, py);
+        grid_map::Position position(px, py); // Get position in map
 
-        if (!raw_map_.getIndex(position, index)) {
+        if (!raw_map_.getIndex(position, index)) { // Get index of map
             continue; // skip this point outside of map
         }
 
@@ -350,6 +352,7 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
         double R = distance_squared * 0.006518; // sensor covariance model for zed 2i camera
         R = R * R; // variance
 
+        // Get info about map at point
         auto& elevation = elevation_layer(index(0), index(1));
         auto& variance = variance_layer(index(0), index(1));
         auto& time = time_layer(index(0), index(1));
@@ -358,6 +361,7 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
         auto& sensor_y_at_lowest_scan = sensor_y_at_lowest_scan_layer(index(0), index(1));
         auto& sensor_z_at_lowest_scan = sensor_z_at_lowest_scan_layer(index(0), index(1));
 
+        // If no info about this position
         if (std::isnan(elevation)) {
             elevation = pz;
             variance = R;
@@ -365,9 +369,12 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
             continue;
         }
 
+        // mahalanobis_distance = how many standard deviations from the mean this is
         const double mahalanobis_distance = std::abs(pz - elevation) / sqrt(variance);
         if (mahalanobis_distance > mahalanobis_distance_threshold_) {
+            // Only add points one second after grid point initialization
             if (time_since_start - time <= scanning_duration_) {
+                // Takes the worst case scenerio for the elevation, this is the cause of the ceiling error
                 if (pz > elevation) {
                     // set point to heigher elevation.
                     elevation = pz;
@@ -375,11 +382,16 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
                 }
             } 
             else {
+                // Adding a small amount to variance when its past scanning time?
+                // Idk why you would do this, wouldnt this cause issues the longer the rover stayed in one spot?
+                // IE, increases spread of data by a constant amount everytime a point is scanned when past scanning time.
+                // TODO: See if this should be removed in testing.
                 variance += multi_height_noise_;
             }
             continue;
         }
 
+        // If point is past threshold:
         // point + 3 sigma
         const double point_height_plus_uncertainty = pz + 3.0 * sqrt(variance);
         if (std::isnan(lowest_scan_point) || point_height_plus_uncertainty < lowest_scan_point) {
@@ -399,6 +411,7 @@ void PointcloudToGridmap::add_sensor_data(const sensor_msgs::msg::PointCloud2::S
     // clean map
     for (grid_map::GridMapIterator iterator(raw_map_); !iterator.isPastEnd(); ++iterator) {
         auto& variance = raw_map_.at("variance", *iterator);
+        // Clamps variance for each point of the map
         if (!std::isnan(variance)) {
             variance = variance < min_variance_ ? min_variance_ : variance;
             variance = variance > max_variance_ ? max_variance_ : variance;
