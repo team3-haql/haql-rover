@@ -6,8 +6,14 @@ services:
       - ./:/root/ralphee_ws
       - ralphee-data:/root
       - ros:/opt/ros
+      - /private/tmp/com.apple.launchd.XWemurepAA:/private/tmp/com.apple.launchd.XWemurepAA:rw
     working_dir: /root/ralphee_ws
     entrypoint: sleep infinity
+    environment:
+      - USERNAME=default
+      - WEBOTS_SHARED_FOLDER=~/ralphee_ws/src/webots_dev
+    ports:
+      - '3000:3000'
 volumes:
   ralphee-data:
   ros:
