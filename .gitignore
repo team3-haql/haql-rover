@@ -8,3 +8,8 @@ setup_complete
 build
 install
 log
+*zig_compiler*
+*zig-cache
+*zig-out
+*.o
+*.a
