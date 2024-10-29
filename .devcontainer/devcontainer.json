@@ -12,7 +12,8 @@
                 "ms-python.python",
                 "ms-python.debugpy",
                 "twxs.cmake",
-                "ms-azuretools.vscode-docker"
+                "ms-azuretools.vscode-docker",
+                "ziglang.vscode-zig"
             ]
         }
     },
