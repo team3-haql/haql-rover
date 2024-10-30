@@ -11,4 +11,7 @@ fi
 
 ~/ralphee_ws/zig/zig_compiler/zig build
 
+cp /root/ralphee_ws/zig/zig-out/lib/libzigmaps.so /usr/lib
+cp /root/ralphee_ws/zig/zig-out/include/zigmaps.h /usr/include
+
 cd $currdir
