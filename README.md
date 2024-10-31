@@ -1,5 +1,13 @@
 # BodenBot Rover Packages
 
+## Credit
+
+### Bodenbot
+This project is based off [Bodenbot](https://github.com/team19-haql/haql-rover/commits/main/) which was developed primarily by [Deweykai](https://github.com/deweykai).
+
+### Zigmaps
+This project also includes [Zigmaps](https://github.com/deweykai/zigmaps) a library developed by [Deweykai](https://github.com/deweykai) for this project.
+
 ## Structure
 
 ### boden_bringup
