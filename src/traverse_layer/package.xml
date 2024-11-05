@@ -17,6 +17,7 @@
   <depend>grid_map_filters</depend>
   <depend>grid_map_loader</depend>
   <depend>grid_map_msgs</depend>
+  <depend>grid_map_demos</depend>
   <depend>grid_map_ros</depend>
   <depend>grid_map_rviz_plugin</depend>
   <depend>grid_map_visualization</depend>

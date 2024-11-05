@@ -9,9 +9,6 @@ if [ ! -d ~/ralphee_ws/zig/zig_compiler ]; then
     mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa zig_compiler
 fi
 
-~/ralphee_ws/zig/zig_compiler/zig build
-
-cp /root/ralphee_ws/zig/zig-out/lib/libzigmaps.so /usr/lib
-cp /root/ralphee_ws/zig/zig-out/include/zigmaps.h /usr/include
+~/ralphee_ws/zig/zig_compiler/zig build --release=fast -p /usr
 
 cd $currdir

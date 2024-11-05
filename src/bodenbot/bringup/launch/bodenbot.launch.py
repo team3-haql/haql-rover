@@ -79,6 +79,7 @@ def get_controller_nodes(
             ('~/robot_description', '/robot_description'),
             ('/bodenbot_controller/cmd_vel_unstamped', '/cmd_vel'),
         ],
+        prefix=['gdb -ex run --args'],
         condition=IfCondition(start_controller_node),
     )
 

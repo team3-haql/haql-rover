@@ -9,7 +9,9 @@ build
 install
 log
 *zig_compiler*
-*zig-cache
-*zig-out
+*zig-cache*
+*zig-out*
 *.o
 *.a
+*nav2_mppi_controller*
+*nav2_core*
