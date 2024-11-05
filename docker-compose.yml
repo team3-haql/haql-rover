@@ -11,7 +11,7 @@ services:
     entrypoint: sleep infinity
     environment:
       - USERNAME=default
-      - WEBOTS_SHARED_FOLDER=~/haql-rover/src/webots_dev
+      - WEBOTS_SHARED_FOLDER=~/ralphee_ws/src/webots_dev/worlds
     ports:
       - '3000:3000'
 volumes:
