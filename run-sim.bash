@@ -7,7 +7,7 @@ ros2 launch bodenbot bodenbot.launch.py \
     start_navigation:=true \
     start_traverse_layer:=true \
     start_docking_server:=true \
-    start_webots:=false \
+    start_webots:=true \
     use_mock_hardware:=true \
     debug_hardware:=true
 

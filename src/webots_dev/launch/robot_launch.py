@@ -38,12 +38,12 @@ def generate_launch_description():
     use_foxglove = LaunchConfiguration('use_foxglove', default=False)
     # show_gui = LaunchConfiguration('gui', default=False)
 
-    # webots = WebotsLauncher(
-    #     world=PathJoinSubstitution([package_dir, 'worlds', world]),
-    #     mode=mode,
-    #     ros2_supervisor=True,
-    #     gui=show_gui,
-    # )
+    webots = WebotsLauncher(
+        world=PathJoinSubstitution([package_dir, 'worlds', world]),
+        mode=mode,
+        ros2_supervisor=True,
+        gui=show_gui,
+    )
 
     print(os.environ)
     print(controller_protocol())
