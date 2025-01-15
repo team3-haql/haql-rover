@@ -112,5 +112,6 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp"
-    }
+    },
+    "C_Cpp.codeAnalysis.clangTidy.args": ["--skip-headers flag"]
 }
