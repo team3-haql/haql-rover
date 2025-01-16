@@ -16,7 +16,7 @@
   <depend>apriltag_ros</depend>
   <depend>nav2_bringup</depend>
   <depend>rclcpp_components</depend>
-  <depend>zed_wrapper</depend>
+  <!-- <depend>zed_wrapper</depend> -->
 
   <build_depend>libi2c-dev</build_depend>
 
