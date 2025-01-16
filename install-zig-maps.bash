@@ -1,6 +1,7 @@
 #!/bin/bash
 
 currdir=$(pwd)
+arch=$(uname -i)
 
 cd ~/haql-rover/zig
 
