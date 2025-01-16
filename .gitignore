@@ -15,3 +15,4 @@ log
 *.a
 *nav2_mppi_controller*
 *nav2_core*
+*zig-linux*

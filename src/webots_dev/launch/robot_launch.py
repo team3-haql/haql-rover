@@ -32,11 +32,11 @@ from webots_ros2_driver.utils import controller_protocol, controller_ip_address
 
 def generate_launch_description():
     package_dir = get_package_share_directory('webots_dev')
-    # mode = LaunchConfiguration('mode')
-    # world = LaunchConfiguration('world')
+    mode = LaunchConfiguration('mode')
+    world = LaunchConfiguration('world')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     use_foxglove = LaunchConfiguration('use_foxglove', default=False)
-    # show_gui = LaunchConfiguration('gui', default=False)
+    show_gui = LaunchConfiguration('gui', default=False)
 
     webots = WebotsLauncher(
         world=PathJoinSubstitution([package_dir, 'worlds', world]),

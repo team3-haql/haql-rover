@@ -11,7 +11,7 @@ if [ ! -d ~/ralphee_ws/zig/zig_compiler ]; then
         mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa zig_compiler
     else
         tar -xf ~/ralphee_ws/zig/zig-arm64.tar.xz
-        mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa zig_compiler
+        mv zig-linux-aarch64-0.14.0-dev.2647+5322459a0 zig_compiler
     fi
 fi
 
