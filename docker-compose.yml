@@ -1,7 +1,6 @@
 services:
   ralphee:
-    image: osrf/ros:humble-desktop
-    platform: linux/amd64
+    image: ros:humble-ros-base
     volumes:
       - ./:~/haql-rover
       - ralphee-data:~
