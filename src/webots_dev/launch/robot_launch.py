@@ -115,7 +115,7 @@ def generate_launch_description():
             ros2_control_params
         ],
         remappings=mappings,
-        respawn=True
+        # respawn=True
     )
     gps_pose = Node(
         package='webots_dev',
