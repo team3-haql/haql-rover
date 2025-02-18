@@ -129,8 +129,7 @@ def generate_launch_description():
             }
         ]
     )
-
-
+    
     # Wait for the simulation to be ready to start the tools and spawners
     waiting_nodes = WaitForControllerConnection(
         target_driver=bodenbot_driver,
