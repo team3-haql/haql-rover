@@ -123,8 +123,9 @@ class DemoAuto:
         msg.header.frame_id = 'map'
         msg.poses = wps
         self.waypoint_publisher.publish(msg)
+        self.navigator.get_logger().info('published!')
         self.navigator.followWaypoints(wps)
-
+        self.navigator.get_logger().info('starting!')
         # run navigation task
         while not self.navigator.isTaskComplete():
             time.sleep(0.1)
