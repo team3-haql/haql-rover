@@ -15,6 +15,6 @@ if [ ! -d ~/haql-rover/zig/zig_compiler ]; then
     fi
 fi
 
-~/ralphee_ws/zig/zig_compiler/zig build --release=fast -p /usr
+~/haql-rover/zig/zig_compiler/zig build --release=fast -p /usr
 
 cd $currdir
