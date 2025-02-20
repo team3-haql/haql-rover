@@ -17,7 +17,4 @@ fi
 
 ~/haql-rover/zig/zig_compiler/zig build --release=fast -p /usr
 
-sudo cp ~/haql-rover/zig/zig-out/lib/libzigmaps.so /usr/lib
-sudo cp ~/haql-rover/zig/zig-out/include/zigmaps.h /usr/include
-
 cd $currdir
