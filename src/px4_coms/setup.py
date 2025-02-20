@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'px4_service = px4_coms.px4_service:main',
+            'px4_advertiser = px4_coms.px4_advertiser:main',
             'px4_client = px4_coms.px4_client:main'
         ],
     },
