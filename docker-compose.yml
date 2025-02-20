@@ -2,20 +2,18 @@ services:
   ralphee:
     image: ros:humble-ros-base
     volumes:
-      - ./:~/haql-rover
-      - ralphee-data:~
+      - ./:/root/haql-rover
+      - ralphee-data:/root
       - ros:/opt/ros
       - /private/tmp/com.apple.launchd.XWemurepAA:/private/tmp/com.apple.launchd.XWemurepAA:rw
-    working_dir: ~/haql-rover
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    working_dir: /root/ralphee_ws
+    working_dir: /root/haql-rover
     entrypoint: sleep infinity
     environment:
       - DISPLAY=docker.for.mac.host.internal:0
       - USERNAME=default
       - QT_X11_NO_MITSHM=1
       - QT_QPA_PLATFORM=offscreen
-      - WEBOTS_SHARED_FOLDER=~/haql-rover/src/webots_dev/worlds
+      - WEBOTS_SHARED_FOLDER=/root/haql-rover/src/webots_dev/worlds
     ports:
       - '3000:3000'
       - '3001:3001'
