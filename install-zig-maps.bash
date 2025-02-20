@@ -15,7 +15,7 @@ if [ ! -d ~/haql-rover/zig/zig_compiler ]; then
     fi
 fi
 
-~/ralphee_ws/zig/zig_compiler/zig build --release=fast -p /usr
+~/haql-rover/zig/zig_compiler/zig build --release=fast -p /usr
 
 sudo cp ~/haql-rover/zig/zig-out/lib/libzigmaps.so /usr/lib
 sudo cp ~/haql-rover/zig/zig-out/include/zigmaps.h /usr/include
