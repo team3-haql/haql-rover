@@ -70,7 +70,7 @@ This will automatically run docker and download the container.
 
 After the container has been installed run the following to download dependencies and compile the code.
 ```console
-cd /root/ralphee_ws
+cd ~/haql-rover
 . install-deps.bash
 . compile.bash
 ```

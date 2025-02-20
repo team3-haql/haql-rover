@@ -2,16 +2,16 @@
 
 currdir=$(pwd)
 
-cd ~/ralphee_ws/zig
+cd ~/haql-rover/zig
 
-if [ ! -d ~/ralphee_ws/zig/zig_compiler ]; then
-    tar -xf ~/ralphee_ws/zig/zig_compiler.tar.xz
-    mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa zig_compiler
+if [ ! -d ~/haql-rover/zig/zig_compiler ]; then
+    sudo tar -xf ~/haql-rover/zig/zig.tar.xz
+    sudo mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa zig_compiler
 fi
 
-~/ralphee_ws/zig/zig_compiler/zig build
+~/haql-rover/zig/zig_compiler/zig build
 
-cp /root/ralphee_ws/zig/zig-out/lib/libzigmaps.so /usr/lib
-cp /root/ralphee_ws/zig/zig-out/include/zigmaps.h /usr/include
+sudo cp ~/haql-rover/zig/zig-out/lib/libzigmaps.so /usr/lib
+sudo cp ~/haql-rover/zig/zig-out/include/zigmaps.h /usr/include
 
 cd $currdir

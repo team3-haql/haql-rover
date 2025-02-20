@@ -32,18 +32,18 @@ from webots_ros2_driver.utils import controller_protocol, controller_ip_address
 
 def generate_launch_description():
     package_dir = get_package_share_directory('webots_dev')
-    # mode = LaunchConfiguration('mode')
-    # world = LaunchConfiguration('world')
+    mode = LaunchConfiguration('mode')
+    world = LaunchConfiguration('world')
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
     use_foxglove = LaunchConfiguration('use_foxglove', default=False)
-    # show_gui = LaunchConfiguration('gui', default=False)
+    show_gui = LaunchConfiguration('gui', default=False)
 
-    # webots = WebotsLauncher(
-    #     world=PathJoinSubstitution([package_dir, 'worlds', world]),
-    #     mode=mode,
-    #     ros2_supervisor=True,
-    #     gui=show_gui,
-    # )
+    webots = WebotsLauncher(
+        world=PathJoinSubstitution([package_dir, 'worlds', world]),
+        mode=mode,
+        ros2_supervisor=True,
+        gui=show_gui,
+    )
 
     print(os.environ)
     print(controller_protocol())
@@ -162,8 +162,8 @@ def generate_launch_description():
             default_value='false',
             description='Webots show gui',
         ),
-        # webots,
-        # webots._supervisor,
+        webots,
+        webots._supervisor,
         
         robot_state_publisher,
         footprint_publisher,
@@ -173,12 +173,12 @@ def generate_launch_description():
         foxglove_bridge,
 
         # This action will kill all nodes once the Webots simulation has exited
-        # launch.actions.RegisterEventHandler(
-        #     event_handler=launch.event_handlers.OnProcessExit(
-        #         target_action=webots,
-        #         on_exit=[
-        #             launch.actions.EmitEvent(event=launch.events.Shutdown())
-        #         ],
-        #     )
-        # )
+        launch.actions.RegisterEventHandler(
+            event_handler=launch.event_handlers.OnProcessExit(
+                target_action=webots,
+                on_exit=[
+                    launch.actions.EmitEvent(event=launch.events.Shutdown())
+                ],
+            )
+        )
     ])
