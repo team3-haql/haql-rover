@@ -6,7 +6,7 @@ cd build
 cmake ..
 make
 sudo make install
-if [ $? == 0 ]; then
+if [ $? != 0 ]; then
     echo make failed
     return 1
 fi
