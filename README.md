@@ -10,26 +10,13 @@ This project also includes [Zigmaps](https://github.com/deweykai/zigmaps) a libr
 
 ## Structure
 
-### boden_bringup
-
-Launch scripts for starting robot services.
-
-### boden_description
-
-Description of the robot in URDF format.
+### bodenbot
 
 ### boden_interfaces
 
 Communication interfaces for the rover such as the docking action request.
 
-### boden_misc
-
-Various nodes used in the running of the rover like the motor driver and
-docking action server.
-
-### boden_navigation
-
-The package with configuration for the navigation stack used by the rover.
+### boden_scripts
 
 ### traverse_layer
 
@@ -50,7 +37,7 @@ Package for launching the webots simulation.
 
 **Install [vscode](https://code.visualstudio.com/download)**
 
-**Install [dev containers extension for vscode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)**
+**Install [dev containers extension for vscode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)** (NOTE: This can be done inside vscode)
 
 **Setup GitHub SSH keys**
 - [Generate SSH Key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
@@ -60,7 +47,7 @@ Package for launching the webots simulation.
 
 Run this to download the repository:
 ```console
-git clone git@github.com:team3-haql/haql-rover.git
+git clone git@github.com:team3-haql/haql-rover.git --recursive
 ```
 
 After downloading the repository open it in VSCode.
@@ -75,7 +62,50 @@ cd ~/haql-rover
 . compile.bash
 ```
 
-## Trouble Shooting:
+## Setup VSCode
+In order to make intellisense work perform the following:
 
-If errors are encountered while compiling delete the "build", "log", and "install" folders and try again.
-If intellisense is broken try to reopen the project (Traverse Layer is currently plagued with weird intellisense issues).
+- Create a folder called ```.vscode``` in haql-rover
+- Create a file called ```c_cpp_properties.json``` in ```haql-rover/.vscode```. Paste the following in:
+```json
+{
+    "configurations": [
+      {
+        "browse": {
+          "databaseFilename": "${default}",
+          "limitSymbolsToIncludedHeaders": false
+        },
+        "includePath": [
+          "/opt/ros/humble/include/**",
+          "/usr/include/**"
+        ],
+        "name": "ROS",
+        "intelliSenseMode": "gcc-x64",
+        "compilerPath": "/usr/bin/gcc",
+        "cStandard": "gnu11",
+        "cppStandard": "c++17",
+        "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+      }
+    ],
+    "version": 4
+}
+```
+- Create a file called ```settings.json``` in ```haql-rover/.vscode```. Paste the following in:
+```json
+{
+    "python.autoComplete.extraPaths": [
+      "/opt/ros/humble/lib/python3.10/site-packages",
+      "/opt/ros/humble/local/lib/python3.10/dist-packages",
+      "{workspaceFolder}/build/bodenbot_scripts",
+      "{workspaceFolder}/build/px4_coms",
+      "{workspaceFolder}/build/webots_dev"
+    ],
+    "python.analysis.extraPaths": [
+      "/opt/ros/humble/lib/python3.10/site-packages",
+      "/opt/ros/humble/local/lib/python3.10/dist-packages",
+      "{workspaceFolder}/build/bodenbot_scripts",
+      "{workspaceFolder}/build/px4_coms",
+      "{workspaceFolder}/build/webots_dev"
+    ]
+}
+```

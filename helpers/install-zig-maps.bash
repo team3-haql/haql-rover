@@ -16,5 +16,8 @@ if [ ! -d ~/haql-rover/zig/zig_compiler ]; then
 fi
 
 ~/haql-rover/zig/zig_compiler/zig build --release=fast -p /usr
+if [ $? == 0 ]; then
+    echo Zig Maps installed!
+fi
 
 cd $currdir
