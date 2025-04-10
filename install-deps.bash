@@ -15,4 +15,3 @@ sudo apt install ros-humble-navigation2
 sudo apt install ros-humble-nav2-bringup
 
 . ./helpers/install-zig-maps.bash
-. ./helpers/compile-micro-xrce.bash
